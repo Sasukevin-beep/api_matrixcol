@@ -2,16 +2,18 @@
 from flask import Flask, jsonify
 
 from rutas.usuarios_rutas import crear_blueprint as bp_usuarios
-from rutas.programas_rutas import crear_blueprint as bp_programas # NUEVO IMPORT
+from rutas.programas_rutas import crear_blueprint as bp_programas
+from rutas.fichas_rutas import crear_blueprint as bp_fichas
 
-def crear_app(servicio_usu=None, servicio_prog=None) -> Flask:
+def crear_app(servicio_usu=None, servicio_prog=None, servicio_ficha=None) -> Flask:
     """Fábrica de la aplicación."""
     app = Flask(__name__)
-    app.json.ensure_ascii = False
-    app.json.sort_keys = False
+    app.json.ensure_ascii = False   # Que las tildes y la ñ se vean tal cual en el JSON.
+    app.json.sort_keys = False      # Respeta el orden en que escribimos las claves.
     
     app.register_blueprint(bp_usuarios(servicio_usu))
-    app.register_blueprint(bp_programas(servicio_prog)) # NUEVO REGISTRO
+    app.register_blueprint(bp_programas(servicio_prog))
+    app.register_blueprint(bp_fichas(servicio_ficha))
 
     @app.get("/")
     def salud():
